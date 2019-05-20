@@ -1,0 +1,22 @@
+import setuptools
+
+setuptools.setup(
+    name='mergedb',
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
+    author='Grayson Head',
+    author_email='grayson@graysonhead.net',
+    url='https://github.com/graysonhead/mergedb',
+    packages=setuptools.find_packages(),
+    license='GPL V3',
+    install_requires=[
+        'pyyaml>=5.1.0',
+        'colorama>=0.4.1'
+    ],
+    long_description=open('README.md').read(),
+    entry_points={
+        'console_scripts': [
+            'runcible = runcible.__main__:main'
+        ]
+    }
+)

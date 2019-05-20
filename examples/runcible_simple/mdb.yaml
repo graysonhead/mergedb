@@ -1,0 +1,13 @@
+---
+backends:
+  - yaml
+default_merge_type: deep_merge
+merge_rules:
+  - key: vlans
+    merge_type: keyed_list_merge
+    keyed_list_merge:
+      key: id
+  - key: interfaces
+    merge_type: keyed_list_merge
+    keyed_list_merge:
+      key: name

@@ -1,0 +1,9 @@
+mergedb:
+  build:
+    - switch1.yaml
+    - switch2.yaml
+  inherit:
+    - Roles/ssh_creds.yaml
+    - Roles/vlans.yaml
+    - Roles/Switch_Classes/spine.yaml
+  merge_type: deep_merge

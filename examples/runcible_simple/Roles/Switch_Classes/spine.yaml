@@ -1,0 +1,12 @@
+{% set vlans = [1,2,3,4,5]%}
+---
+interfaces:
+  {% for i in range(1,3) %}
+  - name: swp{{ i }}
+    vlans: {{ vlans }}
+    portfast: False
+    mtu: 9000
+  {% endfor %}
+vlans:
+  - id: 1
+    name: billy

@@ -1,0 +1,9 @@
+---
+meta:
+  device:
+    ssh:
+      hostname: 192.168.122.41
+    default_management_protocol: ssh
+    driver: cumulus
+  system:
+    hostname: switch1

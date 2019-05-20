@@ -1,0 +1,6 @@
+---
+meta:
+  device:
+    ssh:
+      username: cumulus
+      password: CumulusLinux!
