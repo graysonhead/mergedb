@@ -1,13 +1,9 @@
 import difflib
 from colorama import Fore, Back, Style, init
-init()
-
 import yaml
 from mergedb.merge_functions import deep_merge, simple_merge
 from mergedb.errors import MdbLoadError
-
-
-
+init()
 
 
 class Declaration(object):
@@ -38,12 +34,27 @@ class Declaration(object):
         self.config = self.set_config()
 
     def set_config(self):
+        """
+        This method deep merges the inherited config into the base config, if present
+
+        :return:
+            The merged config dict
+        """
         base_config = {}
         if 'mergedb' in self.base:
             base_config = self.base['mergedb']
+            # Remove the mergedb key from base if present
+            del(self.base['mergedb'])
         return deep_merge(base_config, self.inherited_config)
 
     def merge_inherited(self):
+        """
+        This method performs a top-down merge from self.inherited down to self.base in the manner prescribed by the
+        config.
+
+        :return:
+            The merged dict
+        """
         # Clear the history in case someone is importing and calling this method more than once
         self.merge_history = []
 
@@ -77,19 +88,28 @@ class Declaration(object):
                 else:
                     self.merge_history.append(f"{Fore.BLUE}Merge Layer {declaration.layer_name}:{Fore.RESET}")
                     current_lines = yaml.safe_dump(current).split('\n')
-                    current = merge_method(current, declaration.base)
+                    current = merge_method(current, declaration.base, knockout=knockout_string)
                     post_lines = yaml.safe_dump(current).split('\n')
                     for line in difflib.ndiff(current_lines, post_lines):
                         self.merge_history.append(self._colorize_diff(line))
             self.merge_history.append(f"{Fore.BLUE}Merge Layer {self.layer_name}:{Fore.RESET}")
             current_lines = yaml.safe_dump(current).split('\n')
-            post = merge_method(self.base, current)
+            post = merge_method(self.base, current, knockout=knockout_string)
             post_lines = yaml.safe_dump(post).split('\n')
             for line in difflib.ndiff(current_lines, post_lines):
                 self.merge_history.append(self._colorize_diff(line))
             return post
 
     def _colorize_diff(self, line):
+        """
+        Diff output is run through this method one line at a time in order to colorize it for context
+
+        :param line:
+            One line of diff output
+
+        :return:
+            One line of diff output wrapped in color
+        """
         if line.startswith('+'):
             return Fore.GREEN + line + Fore.RESET
         elif line.startswith('-'):
@@ -100,5 +120,8 @@ class Declaration(object):
             return line
 
     def print_history(self):
+        """
+        Prints self.merge_history to stdout
+        """
         for line in self.merge_history:
             print(line)

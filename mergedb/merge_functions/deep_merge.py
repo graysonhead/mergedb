@@ -44,8 +44,9 @@ def deep_merge_inplace(left, right, path=[], knockout=None):
                 elif type(left[key]) == type(right[key]):
                     left[key] = right[key]
                 else:
-                    raise MdbMergeError(msg=f"Type conflict at {path + [str(key)]}, you cannot deep-merge differing"
-                    f" resource types.")
+                    if key not in knockout_list:
+                        raise MdbMergeError(msg=f"Type conflict at {path + [str(key)]}, you cannot deep-merge differing"
+                        f" resource types.")
         else:
             left[key] = right[key]
         for knockout_key in knockout_list:
