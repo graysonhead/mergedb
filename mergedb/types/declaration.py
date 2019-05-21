@@ -7,16 +7,7 @@ from mergedb.merge_functions import deep_merge, simple_merge
 from mergedb.errors import MdbLoadError
 
 
-def color_diff(diff):
-    for line in diff:
-        if line.startswith('+'):
-            yield Fore.GREEN + line + Fore.RESET
-        elif line.startswith('-'):
-            yield Fore.RED + line + Fore.RESET
-        elif line.startswith('^'):
-            yield Fore.CYAN + line + Fore.RESET
-        else:
-            yield line
+
 
 
 class Declaration(object):
@@ -88,10 +79,26 @@ class Declaration(object):
                     current_lines = yaml.safe_dump(current).split('\n')
                     current = merge_method(current, declaration.base)
                     post_lines = yaml.safe_dump(current).split('\n')
-                    self.merge_history.append(color_diff('\n'.join(difflib.ndiff(current_lines, post_lines))))
+                    for line in difflib.ndiff(current_lines, post_lines):
+                        self.merge_history.append(self._colorize_diff(line))
             self.merge_history.append(f"{Fore.BLUE}Merge Layer {self.layer_name}:{Fore.RESET}")
             current_lines = yaml.safe_dump(current).split('\n')
             post = merge_method(self.base, current)
             post_lines = yaml.safe_dump(post).split('\n')
-            self.merge_history.append(color_diff('\n'.join(difflib.ndiff(current_lines, post_lines))))
+            for line in difflib.ndiff(current_lines, post_lines):
+                self.merge_history.append(self._colorize_diff(line))
             return post
+
+    def _colorize_diff(self, line):
+        if line.startswith('+'):
+            return Fore.GREEN + line + Fore.RESET
+        elif line.startswith('-'):
+            return Fore.RED + line + Fore.RESET
+        elif line.startswith('^') or line.startswith('?'):
+            return Fore.CYAN + line + Fore.RESET
+        else:
+            return line
+
+    def print_history(self):
+        for line in self.merge_history:
+            print(line)
