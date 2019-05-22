@@ -33,6 +33,11 @@ class Declaration(object):
         self.merge_history = []
         self.config = self.set_config()
 
+    def load_inherited_from_config(self):
+        if 'inherit' in self.config:
+            for path in self.config['inherit']:
+                self.inherited.append(Declaration(path.split('/')[-1], ))
+
     def set_config(self):
         """
         This method deep merges the inherited config into the base config, if present
