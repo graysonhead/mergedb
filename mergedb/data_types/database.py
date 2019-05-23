@@ -25,6 +25,15 @@ class Database(object):
             except Exception as e:
                 raise MdbLoadError(msg=f"Failed to load {database_config_path}: {e}")
 
+    def build(self):
+        self.load_database()
+        result = {}
+        for declaration in self.declarations_to_build:
+            declaration.load_inherited_from_config()
+            res = declaration.merge_inherited()
+            result.update({declaration.short_name: res})
+        return result
+
     def load_database(self):
         self.root = Directory(self.path, database=self)
 

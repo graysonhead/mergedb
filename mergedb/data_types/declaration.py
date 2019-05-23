@@ -33,6 +33,7 @@ class Declaration(object):
         """
         self.database = database
         self.layer_path = layer_path
+        self.short_name = layer_path.split("/")[-1]
         self.base = base_declaration
         self.inherited = inherited_declarations
         self.inherited_config = inherited_config

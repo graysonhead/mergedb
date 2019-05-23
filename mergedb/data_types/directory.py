@@ -84,8 +84,3 @@ class Directory(object):
                     return {}
             except Exception as e:
                 raise MdbLoadError(msg=f"Could not load directory {self.path}: {e}")
-
-    def build(self):
-        if 'build' in self.config:
-            for declaration_name in self.config['build']:
-                pass
