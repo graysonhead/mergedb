@@ -13,7 +13,7 @@ class TestDeclarationInheritance(unittest.TestCase):
         base = Declaration('base', base_layer, inherited_declarations=[l1])
         result = base.merge_inherited()
 
-        expected_result = {'outer_option': {'inner_option': True}}
+        expected_result = {'outer_option': {'inner_option': False}}
         self.assertEqual(expected_result, result)
 
     def test_3_layer_deep_merge(self):

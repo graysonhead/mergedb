@@ -1,0 +1,41 @@
+from mergedb.data_types.directory import Directory
+from mergedb.errors import MdbLoadError
+import yaml
+import os
+
+
+class Database(object):
+
+    def __init__(self, database_root_path: str):
+        self.root = None
+        self.path = database_root_path
+        self.files = os.listdir(database_root_path)
+        self.declarations = {}
+        self.declarations_to_build = []
+
+        if 'mdb.yaml' in self.files:
+            database_config_path = f"{database_root_path}/mdb.yaml"
+        elif 'mdb.yml' in self.files:
+            database_config_path = f"{database_root_path}/mdb.yml"
+        else:
+            raise MdbLoadError(msg=f"Could not find a mdb.yaml in {database_root_path}")
+        with open(database_config_path) as file:
+            try:
+                self.config = yaml.safe_load(file.read())
+            except Exception as e:
+                raise MdbLoadError(msg=f"Failed to load {database_config_path}: {e}")
+
+    def load_database(self):
+        self.root = Directory(self.path, database=self)
+
+    def save_declaration(self, path, declaration):
+        self.declarations.update({path: declaration})
+
+    def add_to_build_list(self, declaration):
+        self.declarations_to_build.append(declaration)
+
+    def load_declaration(self, path):
+        for key, value in self.declarations.items():
+            if path in key:
+                return value
+        raise MdbLoadError(msg=f"Could not find declaration {path}")

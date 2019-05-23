@@ -1,6 +1,9 @@
 ---
+#vlans:
+#  {% for i in range(1,6) %}
+#  - id: {{ i }}
+#    name: bob
+#  {% endfor %}
 vlans:
-  {% for i in range(1,6) %}
-  - id: {{ i }}
+  - id: 1
     name: bob
-  {% endfor %}
