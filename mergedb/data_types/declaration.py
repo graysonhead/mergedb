@@ -1,7 +1,7 @@
 import difflib
 from colorama import Fore, Back, Style, init
 import yaml
-from mergedb.merge_functions import deep_merge, simple_merge
+from mergedb.merge_functions.dict import deep_merge, simple_merge
 from mergedb.errors import MdbLoadError
 init()
 

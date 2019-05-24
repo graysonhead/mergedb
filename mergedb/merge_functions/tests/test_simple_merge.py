@@ -1,5 +1,5 @@
 import unittest
-from mergedb.merge_functions import simple_merge_inplace, simple_merge
+from mergedb.merge_functions.dict import simple_merge_inplace, simple_merge
 
 
 class TestSimpleMerge(unittest.TestCase):

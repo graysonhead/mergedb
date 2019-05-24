@@ -1,5 +1,5 @@
 from mergedb.errors import MdbMergeError
-from mergedb.merge_functions.array_merge import array_merge_simple_nodupe
+from mergedb.merge_functions.array import array_merge_simple_nodupe
 
 
 def deep_merge(left, right, knockout=None, list_merge=array_merge_simple_nodupe):
@@ -74,4 +74,14 @@ def deep_merge_inplace(left, right, path=[], knockout=None, list_merge=array_mer
             left[key] = right[key]
         for knockout_key in knockout_list:
             del left[knockout_key]
+    return left
+
+
+def simple_merge(left, right):
+    return simple_merge_inplace(dict(left), right)
+
+
+def simple_merge_inplace(left, right):
+    for key, value in right.items():
+        left.update({key: value})
     return left

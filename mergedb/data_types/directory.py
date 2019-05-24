@@ -1,7 +1,7 @@
 import yaml
 import os
 from mergedb.data_types.declaration import Declaration
-from mergedb.merge_functions.deep_merge import deep_merge
+from mergedb.merge_functions.dict import deep_merge
 from mergedb.errors import *
 from jinja2 import Template
 

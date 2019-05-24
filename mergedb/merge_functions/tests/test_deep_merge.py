@@ -1,5 +1,5 @@
 import unittest
-from mergedb.merge_functions import deep_merge_inplace, deep_merge
+from mergedb.merge_functions.dict import deep_merge_inplace, deep_merge
 from mergedb.errors import MdbMergeError
 
 
