@@ -2,7 +2,7 @@ from mergedb.errors import MdbMergeError
 from mergedb.merge_functions.array import array_merge_simple_nodupe
 
 
-def deep_merge(left, right, knockout=None, list_merge=array_merge_simple_nodupe):
+def deep_merge(left, right, knockout=None, list_merge=array_merge_simple_nodupe, array_merge_rules=[]):
     """
     Calls deep_merge_inplace, but doesn't do the merge inplace.
 
@@ -21,10 +21,14 @@ def deep_merge(left, right, knockout=None, list_merge=array_merge_simple_nodupe)
     :return:
         The modified left dict
     """
-    return deep_merge_inplace(dict(left), right, knockout=knockout, list_merge=array_merge_simple_nodupe)
+    return deep_merge_inplace(dict(left),
+                              right,
+                              knockout=knockout,
+                              list_merge=list_merge,
+                              array_merge_rules=array_merge_rules)
 
 
-def deep_merge_inplace(left, right, path=[], knockout=None, list_merge=array_merge_simple_nodupe):
+def deep_merge_inplace(left, right, path=[], knockout=None, list_merge=array_merge_simple_nodupe, array_merge_rules=[]):
     """
     Does a deep-merge of the right dict ONTO the left dict
 
@@ -62,8 +66,14 @@ def deep_merge_inplace(left, right, path=[], knockout=None, list_merge=array_mer
                                        list_merge=list_merge)
                 elif left[key] == right[key]:
                     pass
-                elif type(left[key]) is list and type(right[key]) is list and list_merge:
-                    left[key] = list_merge(left[key], right[key])
+                elif type(left[key]) is list and type(right[key]) is list:
+                    for rule in array_merge_rules:
+                        if rule.evaluate(path, key):
+                            left[key] = rule.array_merge_function(left[key],
+                                                                  right[key],
+                                                                  merge_function=rule.sub_merge_function)
+                        else:
+                            left[key] = list_merge(left[key], right[key])
                 elif type(left[key]) == type(right[key]):
                     left[key] = right[key]
                 else:

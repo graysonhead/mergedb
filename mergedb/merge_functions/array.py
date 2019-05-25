@@ -2,11 +2,11 @@ from mergedb.errors import MdbMergeError
 import copy
 
 
-def array_merge_simple_nodupe(left: list, right:list):
+def array_merge_simple_nodupe(left: list, right:list, key=None, merge_function=None):
     return array_merge_simple_nodupe_inplace(list(left), right)
 
 
-def array_merge_simple_nodupe_inplace(left: list, right: list):
+def array_merge_simple_nodupe_inplace(left: list, right: list, key=None, merge_function=None):
     for right_item in right:
         if right_item not in left:
             left.append(right_item)
@@ -15,18 +15,16 @@ def array_merge_simple_nodupe_inplace(left: list, right: list):
 
 def keyed_array_merge(left: list,
                        right:list,
-                       key,
-                       merge_function=None,
-                      knockout=None):
+                       key='id',
+                       merge_function=None):
     left = copy.deepcopy(left)
-    return keyed_array_merge_inplace(list(left), right, key, merge_function=merge_function, knockout=knockout)
+    return keyed_array_merge_inplace(list(left), right, key=key, merge_function=merge_function)
 
 
 def keyed_array_merge_inplace(left: list,
                        right:list,
-                       key,
-                       merge_function=None,
-                      knockout=None):
+                       key='id',
+                       merge_function=None):
     for right_item in right:
         left_results = list(filter(lambda x: x[key] == right_item[key], left))
         if left_results.__len__() > 1:
@@ -37,7 +35,7 @@ def keyed_array_merge_inplace(left: list,
         else:
             left_item = None
         if left_item:
-            merge_function(left_item, right_item, list_merge=array_merge_simple_nodupe_inplace, knockout=knockout)
+            merge_function(left_item, right_item)
         else:
             left.append(right_item)
     return left
