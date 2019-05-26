@@ -18,7 +18,7 @@ class Cli:
             self.database = Database(self.config.database_path)
             if self.config.function == 'build':
                 pp.pprint(self.database.build())
-        else:
+        elif not self.config.version:
             parser.print_help()
 
 
