@@ -1,6 +1,7 @@
 <img alt="MergeDB" src="docs/media/MergeDB-color.png" width="50%" height="50%">
 
 [![Documentation Status](https://readthedocs.org/projects/mergedb/badge/?version=latest)](https://mergedb.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/graysonhead/mergedb.svg?branch=master)](https://travis-ci.com/graysonhead/mergedb)
 
 
 # MergeDB
