@@ -1,3 +1,5 @@
+# Cumulus_Switches/dir.yaml
+---
 mergedb:
   build:
     - switch1.yaml
@@ -6,4 +8,3 @@ mergedb:
     - Roles/ssh_creds.yaml
     - Roles/vlans.yaml
     - Roles/Switch_Classes/spine.yaml
-  merge_type: deep_merge

@@ -1,9 +1,7 @@
+# Roles/vlans.yaml
 ---
-#vlans:
-#  {% for i in range(1,6) %}
-#  - id: {{ i }}
-#    name: bob
-#  {% endfor %}
 vlans:
-  - id: 1
-    name: bob
+  {% for i in range(1,6) %}
+  - id: {{ i }}
+    name: vlan{{ i }}
+  {% endfor %}
