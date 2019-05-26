@@ -2,6 +2,7 @@ import argparse
 import mergedb
 from mergedb.data_types.database import Database
 import pprint
+import sys
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -18,6 +19,17 @@ class Cli:
             self.database = Database(self.config.database_path)
             if self.config.function == 'build':
                 pp.pprint(self.database.build())
+            if self.config.function == 'detail':
+                self.database.build()
+                if not self.config.target:
+                    print("Detail function requires a target")
+                else:
+                    if self.config.target:
+                        target = list(filter(lambda x: x.short_name == self.config.target, self.database.declarations_to_build))
+                        if target.__len__() < 1:
+                            print(f"Could not find built declaration '{self.config.target}'")
+                            sys.exit(1)
+                        target[0].print_history()
         elif not self.config.version:
             parser.print_help()
 
