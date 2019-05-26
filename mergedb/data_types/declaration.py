@@ -2,6 +2,7 @@ import difflib
 from colorama import Fore, Back, Style, init
 import yaml
 from mergedb.merge_functions.dict import deep_merge, simple_merge
+from mergedb.merge_functions.merge_controller import DeepMergeController, KeyedArrayMergeRule
 from mergedb.errors import MdbLoadError
 init()
 
@@ -38,7 +39,30 @@ class Declaration(object):
         self.inherited = inherited_declarations
         self.inherited_config = inherited_config
         self.merge_history = []
+        self.merge_rules = []
         self.config = self.set_config()
+        self.load_merge_rules()
+        self.merge_controller = self.load_merge_controller()
+
+    def load_merge_controller(self):
+        if self.config['knockout']:
+            knockout = self.config['knockout']
+        else:
+            knockout = None
+        return DeepMergeController(list_merge_rules=self.merge_rules, knockout=knockout)
+
+    def load_merge_rules(self):
+        if 'merge_rules' in self.config:
+            if 'keyed_array' in self.config['merge_rules']:
+                for rule_config in self.config['merge_rules']['keyed_array']:
+                    if 'path' in rule_config:
+                        path = rule_config['path']
+                    else:
+                        path=[]
+                    if 'attribute' not in rule_config or 'key' not in rule_config:
+                        raise MdbLoadError(msg=f"['path', 'attribute'] are required for keyed_array merge rules")
+                    rule = KeyedArrayMergeRule(path, rule_config['attribute'], rule_config['key'])
+                    self.merge_rules.append(rule)
 
     def load_inherited_from_config(self):
         if 'inherit' in self.config:
@@ -73,29 +97,29 @@ class Declaration(object):
         # Clear the history in case someone is importing and calling this method more than once
         self.merge_history = []
 
-        # What kind of merge are we doing?
-        if getattr(self.config, 'merge_type', 'deep_merge') == 'deep_merge':
-            merge_method = deep_merge
-        elif getattr(self.config, 'merge_type', 'deep_merge') == 'simple_merge':
-            merge_method = simple_merge
+        # # What kind of merge are we doing?
+        # if getattr(self.config, 'merge_type', 'deep_merge') == 'deep_merge':
+        #     merge_method = deep_merge
+        # elif getattr(self.config, 'merge_type', 'deep_merge') == 'simple_merge':
+        #     merge_method = simple_merge
 
-        # Is it going to support knockouts?
-        if getattr(self.config, 'knockout', True):
-            knockout = True
-        else:
-            knockout = False
+        # # Is it going to support knockouts?
+        # if getattr(self.config, 'knockout', True):
+        #     knockout = True
+        # else:
+        #     knockout = False
+        #
+        # # Are we using an alternate knockout string?
+        # if getattr(self.config, 'knockout_string', None) and knockout:
+        #     knockout_string = getattr(self.config, 'knockout_string')
+        # elif knockout and getattr(self.config, 'knockout_string', None) is None:
+        #     knockout_string = '~'
+        # else:
+        #     knockout_string = None
 
-        # Are we using an alternate knockout string?
-        if getattr(self.config, 'knockout_string', None) and knockout:
-            knockout_string = getattr(self.config, 'knockout_string')
-        elif knockout and getattr(self.config, 'knockout_string', None) is None:
-            knockout_string = '~'
-        else:
-            knockout_string = None
-
-        # Sanity check(s)
-        if knockout_string and merge_method == simple_merge:
-            raise MdbLoadError(msg="Merge method is simple_merge but knockout is also True, which is not supported.")
+        # # Sanity check(s)
+        # if knockout_string and merge_method == simple_merge:
+        #     raise MdbLoadError(msg="Merge method is simple_merge but knockout is also True, which is not supported.")
 
         if self.inherited:
             current = {}
@@ -109,14 +133,14 @@ class Declaration(object):
                     self.merge_history.append(f"{Fore.BLUE}Merge Layer {declaration.layer_path}:{Fore.RESET}")
                     self.merge_history.append("====================================")
                     current_lines = yaml.safe_dump(current).split('\n')
-                    current = merge_method(current, declaration.base, knockout=knockout_string)
+                    current = self.merge_controller.merge(current, declaration.base)
                     post_lines = yaml.safe_dump(current).split('\n')
                     for line in difflib.ndiff(current_lines, post_lines):
                         self.merge_history.append(self._colorize_diff(line))
             self.merge_history.append(f"{Fore.BLUE}Merge Layer {self.layer_path}:{Fore.RESET}")
             self.merge_history.append("====================================")
             current_lines = yaml.safe_dump(current).split('\n')
-            post = merge_method(current, self.base, knockout=knockout_string)
+            post = self.merge_controller.merge(current, self.base)
             post_lines = yaml.safe_dump(post).split('\n')
             for line in difflib.ndiff(current_lines, post_lines):
                 self.merge_history.append(self._colorize_diff(line))

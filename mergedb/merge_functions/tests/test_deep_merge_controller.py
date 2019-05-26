@@ -1,5 +1,5 @@
 import unittest
-from mergedb.merge_functions.merge_controller import DeepMergeController, KeyedArrayListMergeRule
+from mergedb.merge_functions.merge_controller import DeepMergeController, KeyedArrayMergeRule
 from mergedb.errors import MdbMergeError
 
 
@@ -72,7 +72,8 @@ class TestDeepMerge(unittest.TestCase):
                 'inner_list': [
                     {'key': 1, 'attribute': 'Test'},
                     {'key': 2, 'attribute': 'Test'}
-                ]
+                ],
+                'regular_list_merge': [1,2]
             }
         }
         right = {
@@ -80,7 +81,8 @@ class TestDeepMerge(unittest.TestCase):
                 'inner_list': [
                     {'key': 3, 'attribute': 'Test'},
                     {'key': 2, 'attribute': 'Test2'}
-                ]
+                ],
+                'regular_list_merge': [2,3]
             }
         }
 
@@ -90,15 +92,16 @@ class TestDeepMerge(unittest.TestCase):
                     {'key': 1, 'attribute': 'Test'},
                     {'key': 2, 'attribute': 'Test2'},
                     {'key': 3, 'attribute': 'Test'}
-                ]
+                ],
+                'regular_list_merge': [1,2,3]
             }
         }
 
         merge_rules = [
-            KeyedArrayListMergeRule(
+            KeyedArrayMergeRule(
                 path=['outer'],
-                key='inner_list',
-                item_key='key'
+                attribute='inner_list',
+                key='key'
             )
         ]
         con = DeepMergeController(list_merge_rules=merge_rules)

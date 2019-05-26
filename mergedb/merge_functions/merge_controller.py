@@ -9,25 +9,28 @@ from mergedb.merge_functions.dict import *
 #         self.strategy = strategy
 #
 #
-class KeyedArrayListMergeRule(object):
+class KeyedArrayMergeRule(object):
 
-    def __init__(self, path=[], key=None, item_key='id'):
+    def __init__(self, path=[], attribute=None, key='id'):
         self.path = path
-        self.key = key
-        self.item_key = item_key
-
-
+        self.key = attribute
+        self.item_key = key
 
     def evaluate(self, path, key):
         results = []
         if self.path:
             if path == self.path:
                 results.append(True)
+            else:
+                results.append(False)
         if self.key:
             if key == self.key:
                 results.append(True)
+            else:
+                results.append(False)
         if not results:
             return False
+        # This returns false if any values in the list are false
         return all(results)
 
 
@@ -105,7 +108,7 @@ class DeepMergeController(object):
                         if self.list_merge_rules:
                             for rule in self.list_merge_rules:
                                 if rule.evaluate(path, key):
-                                    if type(rule) is KeyedArrayListMergeRule:
+                                    if type(rule) is KeyedArrayMergeRule:
                                         left[key] = self.keyed_array_merge_inplace(left[key],
                                                                        right[key],
                                                                        rule.item_key)

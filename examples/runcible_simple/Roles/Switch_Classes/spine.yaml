@@ -10,3 +10,5 @@ interfaces:
 vlans:
   - id: 1
     name: billy
+  - id: 3
+    name: new

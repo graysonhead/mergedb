@@ -35,7 +35,7 @@ class Database(object):
         return result
 
     def load_database(self):
-        self.root = Directory(self.path, database=self)
+        self.root = Directory(self.path, database=self, inherited_config=self.config)
 
     def save_declaration(self, path, declaration):
         self.declarations.update({path: declaration})
