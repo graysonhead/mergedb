@@ -1,5 +1,8 @@
 <img alt="MergeDB" src="docs/media/MergeDB-color.png" width="50%" height="50%">
 
+[![Documentation Status](https://readthedocs.org/projects/mergedb/badge/?version=latest)](https://mergedb.readthedocs.io/en/latest/?badge=latest)
+
+
 # MergeDB
 
 MergeDB is a YAML based hierarchical database with a customizable rule-based deep merge system. 
