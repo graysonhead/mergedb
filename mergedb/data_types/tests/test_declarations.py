@@ -39,7 +39,7 @@ class TestDeclarationKnockout(unittest.TestCase):
             'mergedb':
                           {
                               'merge_type': 'deep_merge',
-                              'knockout': True,
+                              'knockout': '~',
                           },
             'outer': '~'
                       }

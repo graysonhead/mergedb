@@ -45,7 +45,7 @@ class Declaration(object):
         self.merge_controller = self.load_merge_controller()
 
     def load_merge_controller(self):
-        if self.config['knockout']:
+        if 'knockout' in self.config:
             knockout = self.config['knockout']
         else:
             knockout = None
