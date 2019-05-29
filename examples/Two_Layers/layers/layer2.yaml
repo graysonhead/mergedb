@@ -1,5 +1,7 @@
 mergedb:
+  knockout: '~'
   inherit:
     - layers/layer1.yaml
 options:
-  2: False
+  2: True
+  3: '~'

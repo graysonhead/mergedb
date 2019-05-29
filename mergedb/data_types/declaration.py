@@ -96,7 +96,7 @@ class Declaration(object):
         """
         # Clear the history in case someone is importing and calling this method more than once
         self.merge_history = []
-
+        # Todo: Implement a callback system and get this merge_history appending BS out of this method
         if self.inherited:
             current = {}
             for declaration in self.inherited:
@@ -120,6 +120,9 @@ class Declaration(object):
             post_lines = yaml.safe_dump(post).split('\n')
             for line in difflib.ndiff(current_lines, post_lines):
                 self.merge_history.append(self._colorize_diff(line))
+            self.merge_history.append("Final Result")
+            self.merge_history.append("====================================")
+            self.merge_history.append(yaml.safe_dump(post))
             return post
 
     @staticmethod
