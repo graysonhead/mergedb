@@ -1,8 +1,39 @@
 Configuration
 =============
 
-MergeDB Configuration
----------------------
+Concepts
+--------
+
+Database
+^^^^^^^^
+
+TODO
+
+mdb.yaml
+--------
+
+When you attempt to build a MergeDB database, MergeDB will look for an ``mdb.yaml`` or ``mdb.yml`` in the root of the
+selected directory. This file can be empty, in which case default parameters will be used, but it is required in order
+to delineate that the directory is a valid MergeDB database.
+
+Declarations
+^^^^^^^^^^^^
+
+TODO
+
+Directories
+^^^^^^^^^^^
+
+TODO
+
+dir.yaml
+--------
+
+In each subdirectory of the database, a ``dir.yaml`` or ``dir.yml`` must exist. This
+
+
+MergeDB Configuration Object
+----------------------------
 
 The mergedb configuration dict can be placed in several different places within mergedb, for example, here is an example
 ``mdb.yaml`` file.
@@ -16,7 +47,7 @@ This object accepts the following parameters:
 Accepted Values: Any valid string or ``false``
 
 Setting a knockout string will allow more specific declarations to override values within less specific
-declarations. See `knockouts` for more information.
+declarations. See Knockouts_ for more information.
 
 .. data:: strategy = 'deep_merge'
 
@@ -43,14 +74,26 @@ Inherit allows you to list the paths of other declarations in order to have them
 inherited, so specifying it in your mdb.yaml will cause all built declarations within your whole database to inherit
 those declarations.
 
-mdb.yaml
---------
+Merge Rules
+-----------
 
-When you attempt to build a MergeDB database, MergeDB will look for an ``mdb.yaml`` or ``mdb.yml`` in the root of the
-selected directory. This file can be empty, in which case default parameters will be used, but it is required in order
-to delineate that the directory is a valid MergeDB database.
+TODO
 
-dir.yaml
---------
+.. _Knockouts:
 
-In each subdirectory of the database, a ``dir.yaml`` or ``dir.yml`` must exist. This
+Knockouts
+---------
+
+Using a knockout character will result in the less specific data at that key being wiped out, for example:
+
+.. literalinclude:: ../examples/minimal/layers/layer1.yaml
+
+.. literalinclude:: ../examples/minimal/layers/layer2.yaml
+
+
+Will result in:
+
+.. program-output:: cd .. && python -m mergedb examples/minimal build
+    :shell:
+
+

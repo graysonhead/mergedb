@@ -1,3 +1,5 @@
+# examples/minimal/layers/layer2.yaml
+---
 mergedb:
   knockout: '~'
   inherit:
