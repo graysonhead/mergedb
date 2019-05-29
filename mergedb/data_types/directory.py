@@ -61,10 +61,10 @@ class Directory(object):
                 raise MdbLoadError(msg=f"Could not load {path}: {e}")
 
     def set_config(self):
-        base_config = {}
-        if 'mergedb' in self.dir_config:
-            base_config = self.dir_config['mergedb']
-        return deep_merge(base_config, self.inherited_config)
+        # base_config = {}
+        # if 'mergedb' in self.dir_config:
+        # base_config = self.dir_config['mergedb']
+        return deep_merge(self.dir_config, self.inherited_config)
 
     def get_dir_config(self):
         if 'dir.yaml' in self.files:
