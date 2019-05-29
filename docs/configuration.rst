@@ -7,7 +7,11 @@ Concepts
 Database
 ^^^^^^^^
 
-TODO
+A database in MergeDB is a structured directory containing YAML files. Each database must have an ``mdb.yaml`` and each
+sub-directory must have a ``dir.yaml`` in order for it's declarations to be included. Any .yaml file in an included
+directory is considered a declaration, and eligible to be built.
+
+Example databases can be found here: https://github.com/graysonhead/mergedb/tree/master/examples
 
 mdb.yaml
 --------
@@ -19,17 +23,23 @@ to delineate that the directory is a valid MergeDB database.
 Declarations
 ^^^^^^^^^^^^
 
-TODO
+Any .yaml in a valid sub-directory is considered a declaration. A declaration has two parts, content and configuration.
+Configuration will accept parameters from the MergeDB Configuration Object unless otherwise specified. Any configuration
+must be placed under a top-level-key of ``mergedb``, and will override the mergedb configuration for this declaration
+only.
 
-Directories
-^^^^^^^^^^^
+For example:
 
-TODO
+.. literalinclude:: ../examples/keyed_array_merge/layers/layer2.yaml
 
-dir.yaml
---------
 
-In each subdirectory of the database, a ``dir.yaml`` or ``dir.yml`` must exist. This
+
+Built Declarations
+^^^^^^^^^^^^^^^^^^
+
+Built declarations are regular declarations that have been added to the build list inside of a ``dir.yaml`` file. They
+serve as the "anchor" for inheritance, and are the deliverable of MergeDB. The end result from running the build command
+will be a dict containing all of the built declarations, keyed by their filenames. See _Examples for more information.
 
 
 MergeDB Configuration Object
