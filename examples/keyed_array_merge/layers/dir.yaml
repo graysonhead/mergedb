@@ -1,0 +1,3 @@
+# examples/keyed_array_merge/layers/dir.yaml
+build:
+  - layer2.yaml

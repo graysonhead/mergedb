@@ -1,0 +1,8 @@
+# examples/keyed_array_merge/layers/layer1.yaml
+subdict:
+  array:
+    - id: 1
+      name: original
+      other_value: unchanged
+    - id: 2
+      name: inherited

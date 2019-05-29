@@ -77,7 +77,30 @@ those declarations.
 Merge Rules
 -----------
 
-TODO
+Merge rules are a set of rules that can be specified in the configuraton object that can override the default merge
+behavior.
+
+Keyed Array
+^^^^^^^^^^^
+
+Keyed Array merge rules modify the default merging behavior of arrays. You would use a keyed array merge in the case
+where you have a list of dicts that can each be identified by a unique key attribute. This key attribute is used by the
+keyed array merge strategy to perform a merge operation on the individual items within the array, using their key to
+associate them with each other.
+
+For example:
+
+.. literalinclude:: ../examples/keyed_array_merge/layers/layer1.yaml
+
+.. literalinclude:: ../examples/keyed_array_merge/layers/layer2.yaml
+
+.. literalinclude:: ../examples/keyed_array_merge/layers/dir.yaml
+
+Will result in
+
+
+.. program-output:: cd .. && python -m mergedb examples/keyed_array_merge build
+    :shell:
 
 .. _Knockouts:
 
