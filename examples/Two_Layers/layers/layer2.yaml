@@ -1,0 +1,5 @@
+mergedb:
+  inherit:
+    - layers/layer1.yaml
+options:
+  2: False

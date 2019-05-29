@@ -21,7 +21,11 @@ class Database(object):
             raise MdbLoadError(msg=f"Could not find a mdb.yaml in {database_root_path}")
         with open(database_config_path) as file:
             try:
-                self.config = yaml.safe_load(file.read())
+                config = yaml.safe_load(file.read())
+                if config:
+                    self.config = config
+                else:
+                    self.config = {}
             except Exception as e:
                 raise MdbLoadError(msg=f"Failed to load {database_config_path}: {e}")
 

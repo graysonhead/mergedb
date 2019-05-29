@@ -11,6 +11,7 @@ Welcome to mergedb's documentation!
    :caption: Contents:
 
    introduction
+   configuration
    examples
 
 

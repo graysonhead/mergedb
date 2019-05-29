@@ -97,30 +97,6 @@ class Declaration(object):
         # Clear the history in case someone is importing and calling this method more than once
         self.merge_history = []
 
-        # # What kind of merge are we doing?
-        # if getattr(self.config, 'merge_type', 'deep_merge') == 'deep_merge':
-        #     merge_method = deep_merge
-        # elif getattr(self.config, 'merge_type', 'deep_merge') == 'simple_merge':
-        #     merge_method = simple_merge
-
-        # # Is it going to support knockouts?
-        # if getattr(self.config, 'knockout', True):
-        #     knockout = True
-        # else:
-        #     knockout = False
-        #
-        # # Are we using an alternate knockout string?
-        # if getattr(self.config, 'knockout_string', None) and knockout:
-        #     knockout_string = getattr(self.config, 'knockout_string')
-        # elif knockout and getattr(self.config, 'knockout_string', None) is None:
-        #     knockout_string = '~'
-        # else:
-        #     knockout_string = None
-
-        # # Sanity check(s)
-        # if knockout_string and merge_method == simple_merge:
-        #     raise MdbLoadError(msg="Merge method is simple_merge but knockout is also True, which is not supported.")
-
         if self.inherited:
             current = {}
             for declaration in self.inherited:
