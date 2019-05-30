@@ -44,6 +44,15 @@ class Declaration(object):
         self.load_merge_rules()
         self.merge_controller = self.load_merge_controller()
 
+    def get_name(self):
+        """
+        Strips the extension off of the name and returns it.
+
+        :return:
+            Short name of the dictionary without file extension
+        """
+        return self.short_name.split('.')[0]
+
     def load_merge_controller(self):
         if 'knockout' in self.config:
             knockout = self.config['knockout']

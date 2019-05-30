@@ -35,7 +35,7 @@ class Database(object):
         for declaration in self.declarations_to_build:
             declaration.load_inherited_from_config()
             res = declaration.merge_inherited()
-            result.update({declaration.short_name: res})
+            result.update({declaration.get_name(): res})
         return result
 
     def load_database(self):
