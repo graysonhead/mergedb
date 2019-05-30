@@ -3,6 +3,11 @@ import mergedb
 from mergedb.data_types.database import Database
 import pprint
 import sys
+import json
+import yaml
+
+dump_noalias = yaml.dumper.SafeDumper
+dump_noalias.ignore_aliases = lambda self, data: True
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -18,7 +23,7 @@ class Cli:
         if self.config.database_path:
             self.database = Database(self.config.database_path)
             if self.config.function == 'build':
-                pp.pprint(self.database.build())
+                print(self.format_dict(self.database.build()))
             if self.config.function == 'detail':
                 self.database.build()
                 if not self.config.target:
@@ -30,9 +35,19 @@ class Cli:
                             print(f"Could not find built declaration '{self.config.target}'")
                             sys.exit(1)
                         target[0].print_history()
+            if self.config.function == 'config':
+                self.database.build()
+                print(self.format_dict(self.database.config))
         elif not self.config.version:
             parser.print_help()
 
+    def format_dict(self, output: dict):
+        if self.config.output == 'yaml':
+            return yaml.dump(output, default_flow_style=False, Dumper=dump_noalias)
+        elif self.config.output == 'json':
+            return json.dumps(output)
+        elif self.config.output == 'pprint':
+            return pprint.pprint(output)
 
     @staticmethod
     def get_args():
@@ -61,6 +76,13 @@ class Cli:
             nargs='?',
             help="Allows you to target a build reference when performing an action. Must be included with "
                  "[ merge_detail ]"
+        )
+        parser.add_argument(
+            '--output',
+            type=str,
+            default='yaml',
+            help="Select the output type, defaults to 'yaml'"
+                 "[ yaml, json, pprint ]"
         )
         parser.add_argument('--version', action='store_true')
         return parser

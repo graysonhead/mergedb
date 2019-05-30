@@ -1,4 +1,5 @@
 from mergedb.data_types.directory import Directory
+from mergedb.merge_functions.merge_controller import DeepMergeController
 from mergedb.errors import MdbLoadError
 import yaml
 import os
@@ -6,7 +7,7 @@ import os
 
 class Database(object):
 
-    def __init__(self, database_root_path: str):
+    def __init__(self, database_root_path: str, default_settings: dict = {}):
         self.root = None
         self.path = database_root_path
         self.files = os.listdir(database_root_path)
@@ -28,6 +29,9 @@ class Database(object):
                     self.config = {}
             except Exception as e:
                 raise MdbLoadError(msg=f"Failed to load {database_config_path}: {e}")
+        # Merge any program specified default_settings in with the imported ones
+        merger = DeepMergeController()
+        self.config = merger.merge(self.config, default_settings)
 
     def build(self):
         self.load_database()
