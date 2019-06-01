@@ -17,3 +17,9 @@ class MdbMergeError(MdbError):
 
     def __str__(self):
         return self.msg
+
+
+class MdbDeclarationError(MdbError):
+
+    def __str__(self):
+        return self.msg

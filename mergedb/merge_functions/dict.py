@@ -67,13 +67,16 @@ def deep_merge_inplace(left, right, path=[], knockout=None, list_merge=array_mer
                 elif left[key] == right[key]:
                     pass
                 elif type(left[key]) is list and type(right[key]) is list:
-                    for rule in array_merge_rules:
-                        if rule.evaluate(path, key):
-                            left[key] = rule.array_merge_function(left[key],
-                                                                  right[key],
-                                                                  merge_function=rule.sub_merge_function)
-                        else:
-                            left[key] = list_merge(left[key], right[key])
+                    if array_merge_rules:
+                        for rule in array_merge_rules:
+                            if rule.evaluate(path, key):
+                                left[key] = rule.array_merge_function(left[key],
+                                                                      right[key],
+                                                                      merge_function=rule.sub_merge_function)
+                            else:
+                                left[key] = list_merge(left[key], right[key])
+                    else:
+                        left[key] = list_merge(left[key], right[key])
                 elif type(left[key]) == type(right[key]):
                     left[key] = right[key]
                 else:

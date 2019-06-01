@@ -25,12 +25,12 @@ class Directory(object):
         for file in self.files:
             path = f"{self.path}/{file}"
             if os.path.isdir(path):
-                try:
+                # try:
                     self.directories.update({file: Directory(path,
                                                              inherited_config=self.config,
                                                              database=self.database)})
-                except MdbLoadError as e:
-                    print(f"Skipped loading {path}: {e}")
+                # except MdbLoadError as e:
+                #     print(f"Skipped loading {path}: {e}")
 
     def load_declarations(self):
         for file in self.files:

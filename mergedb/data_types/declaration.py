@@ -3,7 +3,7 @@ from colorama import Fore, Back, Style, init
 import yaml
 from mergedb.merge_functions.dict import deep_merge, simple_merge
 from mergedb.merge_functions.merge_controller import DeepMergeController, KeyedArrayMergeRule
-from mergedb.errors import MdbLoadError
+from mergedb.errors import MdbDeclarationError
 init()
 
 
@@ -44,6 +44,9 @@ class Declaration(object):
         self.load_merge_rules()
         self.merge_controller = self.load_merge_controller()
 
+    def __repr__(self):
+        return f"<Declaration: {self.short_name.split('.')[0]}>"
+
     def get_name(self):
         """
         Strips the extension off of the name and returns it.
@@ -69,7 +72,7 @@ class Declaration(object):
                     else:
                         path=[]
                     if 'attribute' not in rule_config or 'key' not in rule_config:
-                        raise MdbLoadError(msg=f"['path', 'attribute'] are required for keyed_array merge rules")
+                        raise MdbDeclarationError(msg=f"['path', 'attribute'] are required for keyed_array merge rules")
                     rule = KeyedArrayMergeRule(path, rule_config['attribute'], rule_config['key'])
                     self.merge_rules.append(rule)
 
@@ -78,8 +81,8 @@ class Declaration(object):
             for path in self.config['inherit']:
                 try:
                     self.inherited.append(self.database.load_declaration(path))
-                except MdbLoadError as e:
-                    raise MdbLoadError(f"{self.layer_path} tried to load inherited layer {path}, but was unable: {e}")
+                except MdbDeclarationError as e:
+                    raise MdbDeclarationError(f"{self.layer_path} tried to load inherited layer {path}, but was unable: {e}")
 
     def set_config(self):
         """
