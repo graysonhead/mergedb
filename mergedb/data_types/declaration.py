@@ -12,8 +12,8 @@ class Declaration(object):
     def __init__(self,
                  layer_path,
                  base_declaration,
-                 inherited_declarations: list=[],
-                 inherited_config: dict={},
+                 inherited_declarations: list = None,
+                 inherited_config: dict = None,
                  database=None):
         """
         A declaration instance contains a base_declaration (any declaration for which a build is specified), all of the
@@ -36,8 +36,14 @@ class Declaration(object):
         self.layer_path = layer_path
         self.short_name = layer_path.split("/")[-1]
         self.base = base_declaration
-        self.inherited = inherited_declarations
-        self.inherited_config = inherited_config
+        if inherited_declarations:
+            self.inherited = inherited_declarations
+        else:
+            self.inherited = []
+        if inherited_config:
+            self.inherited_config = inherited_config
+        else:
+            self.inherited_config = {}
         self.merge_history = []
         self.merge_rules = []
         self.config = self.set_config()
