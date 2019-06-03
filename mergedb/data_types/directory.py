@@ -8,9 +8,12 @@ from jinja2 import Template
 
 class Directory(object):
 
-    def __init__(self, directory_path: str, inherited_config: dict = {}, database=None):
+    def __init__(self, directory_path: str, inherited_config: dict = None, database=None):
         self.path = directory_path
-        self.inherited_config = inherited_config
+        if inherited_config:
+            self.inherited_config = inherited_config
+        else:
+            self.inherited_config = {}
         self.files = os.listdir(self.path)
         self.dir_config = self.get_dir_config()
         self.config = self.set_config()

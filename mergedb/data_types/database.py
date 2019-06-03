@@ -7,7 +7,7 @@ import os
 
 class Database(object):
 
-    def __init__(self, database_root_path: str, default_settings: dict = {}):
+    def __init__(self, database_root_path: str, default_settings: dict = None):
         self.root = None
         self.path = database_root_path
         self.files = os.listdir(database_root_path)
@@ -31,6 +31,8 @@ class Database(object):
                 raise MdbLoadError(msg=f"Failed to load {database_config_path}: {e}")
         # Merge any program specified default_settings in with the imported ones
         merger = DeepMergeController()
+        if not default_settings:
+            default_settings = {}
         self.config = merger.merge(self.config, default_settings)
 
     def build(self):

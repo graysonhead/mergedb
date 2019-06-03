@@ -1,5 +1,6 @@
 from mergedb.merge_functions.array import *
 from mergedb.merge_functions.dict import *
+import copy
 
 
 # class KeyedArrayMergeOptions(object):
@@ -67,7 +68,8 @@ class DeepMergeController(object):
         :return:
             The modified left dict
         """
-        return self.deep_merge_inplace(dict(left), right)
+        left = copy.deepcopy(left)
+        return self.deep_merge_inplace(left, right)
 
     def deep_merge_inplace(self, left, right, path=[]):
         """
