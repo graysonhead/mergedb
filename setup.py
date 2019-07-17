@@ -8,7 +8,6 @@ setuptools.setup(
     author_email='grayson@graysonhead.net',
     url='https://github.com/graysonhead/mergedb',
     packages=setuptools.find_packages(),
-    license='GPL V3',
     install_requires=[
         'pyyaml>=5.1.0',
         'colorama>=0.4.1',
@@ -20,5 +19,8 @@ setuptools.setup(
         'console_scripts': [
             'mergedb = mergedb.__main__:main'
         ]
-    }
+    },
+    classifiers=[
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
+    ],
 )
