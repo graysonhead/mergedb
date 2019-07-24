@@ -37,11 +37,11 @@ class Database(object):
 
     def build(self, target=None):
         self.load_database()
-        # Sometimes argparse adds spurious quotes
-        target = target.strip('\'')
-        target = target.strip('"')
         result = {}
         if target:
+            # Sometimes argparse adds spurious quotes
+            target = target.strip('\'')
+            target = target.strip('"')
             target_instance = list(filter(lambda x: x.short_name == target, self.declarations_to_build))
             try:
                 target_instance = target_instance[0]
