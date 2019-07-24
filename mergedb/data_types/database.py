@@ -1,6 +1,6 @@
 from mergedb.data_types.directory import Directory
 from mergedb.merge_functions.merge_controller import DeepMergeController
-from mergedb.errors import MdbLoadError
+from mergedb.errors import MdbLoadError, MdbError
 import yaml
 import os
 
@@ -35,9 +35,22 @@ class Database(object):
             default_settings = {}
         self.config = merger.merge(self.config, default_settings)
 
-    def build(self):
+    def build(self, target=None):
         self.load_database()
+        # Sometimes argparse adds spurious quotes
+        target = target.strip('\'')
+        target = target.strip('"')
         result = {}
+        if target:
+            target_instance = list(filter(lambda x: x.short_name == target, self.declarations_to_build))
+            try:
+                target_instance = target_instance[0]
+            except IndexError:
+                raise MdbError(msg=f"Target instance {target} not found in db")
+            target_instance.load_inherited_from_config()
+            res = target_instance.merge_inherited()
+            return {"target": res}
+
         for declaration in self.declarations_to_build:
             declaration.load_inherited_from_config()
             res = declaration.merge_inherited()

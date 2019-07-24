@@ -23,7 +23,10 @@ class Cli:
         if self.config.database_path:
             self.database = Database(self.config.database_path)
             if self.config.function == 'build':
-                print(self.format_dict(self.database.build()))
+                if not self.config.target:
+                    print(self.format_dict(self.database.build()))
+                else:
+                    print(self.format_dict(self.database.build(target=self.config.target)))
             if self.config.function == 'detail':
                 self.database.build()
                 if not self.config.target:
