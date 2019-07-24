@@ -108,14 +108,18 @@ class DeepMergeController(object):
                         pass
                     elif type(left[key]) is list and type(right[key]) is list:
                         if self.list_merge_rules:
+                            matched_rule = None
                             for rule in self.list_merge_rules:
-                                if rule.evaluate(path, key):
-                                    if type(rule) is KeyedArrayMergeRule:
-                                        left[key] = self.keyed_array_merge_inplace(left[key],
-                                                                       right[key],
-                                                                       rule.item_key)
-                                else:
-                                    left[key] = self.default_list_merge_func(left[key], right[key])
+                                if type(rule) is KeyedArrayMergeRule:
+                                    if rule.evaluate(path, key):
+                                        matched_rule = rule
+                                        break
+                            if matched_rule:
+                                left[key] = self.keyed_array_merge_inplace((left[key]),
+                                                                           right[key],
+                                                                           matched_rule.item_key)
+                            else:
+                                left[key] = self.default_list_merge_func(left[key], right[key])
                         else:
                             left[key] = self.default_list_merge_func(left[key], right[key])
                     elif type(left[key]) == type(right[key]):
