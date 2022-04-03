@@ -11,8 +11,7 @@ setuptools.setup(
     install_requires=[
         'pyyaml>=5.1.0',
         'colorama>=0.4.1',
-        'jinja2>=2.10.1',
-        'pprint>=0.1'
+        'jinja2>=2.10.1'
     ],
     long_description=open('README.md').read(),
     entry_points={
